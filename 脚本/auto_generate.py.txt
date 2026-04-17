@@ -1,0 +1,62 @@
+import csv
+import os
+
+# ====================== 【自动清空 + 写入】核心配置 ======================
+CSV_FILE = "有效拟合星系结果.csv"
+# 你的真实列表头（必须和数据完全对应，不能错）
+HEADERS = [
+    "Galaxy", 
+    "总重子质量(M⊙)", 
+    "r0", 
+    "Vflat", 
+    "η((km/s)²)", 
+    "拟合优度R²"
+]
+
+# ====================== 自动清空CSV（只保留表头）======================
+def init_csv():
+    with open(CSV_FILE, "w", newline="", encoding="utf-8-sig") as f:
+        writer = csv.DictWriter(f, fieldnames=HEADERS)
+        writer.writeheader()
+
+# ====================== 写入一行数据 ======================
+def write_fit_result(galaxy_name, M_b, r0, Vflat, eta, R2):
+    data = {
+        "Galaxy": galaxy_name,
+        "总重子质量(M⊙)": M_b,
+        "r0": r0,
+        "Vflat": Vflat,
+        "η((km/s)²)": eta,
+        "拟合优度R²": R2
+    }
+    with open(CSV_FILE, "a", newline="", encoding="utf-8-sig") as f:
+        writer = csv.DictWriter(f, fieldnames=HEADERS)
+        writer.writerow(data)
+
+# ====================== 【你自己的星系拟合循环】======================
+# 下面放你原来的星系遍历 + 拟合代码
+# 我给你做成可直接替换的模板
+
+if __name__ == "__main__":
+    # 1. 启动自动清空（关键！）
+    init_csv()
+    print("✅ 已自动清空旧CSV，准备写入新数据...")
+
+    # ----------------------------------------------------------------
+    # 【这里放入你遍历所有星系、拟合、计算的代码】
+    # 示例格式如下，你把自己的逻辑套进来即可：
+    # ----------------------------------------------------------------
+    # for galaxy_file in galaxy_files:
+    #     你的拟合计算 ...
+    #     galaxy_name = ...
+    #     M_b = ...
+    #     r0 = ...
+    #     Vflat = ...
+    #     eta = ...
+    #     R2 = ...
+    #
+    #     每算完一个，调用这行写入：
+    #     write_fit_result(galaxy_name, M_b, r0, Vflat, eta, R2)
+    # ----------------------------------------------------------------
+
+    print("✅ 所有星系数据已写入CSV！")
